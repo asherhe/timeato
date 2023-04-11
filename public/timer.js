@@ -3,8 +3,6 @@ var timerStart = undefined,
 
 setInterval(() => {
   if (timerStart !== undefined) {
-    let now = performance.now();
-    console.log(`${now} - ${timerStart} = ${now - timerStart} = ${now - timerStart + timeOffset} ms`);
     postMessage(Math.floor((performance.now() - timerStart + timeOffset) * 0.001));
   }
 }, 100);

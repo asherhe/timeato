@@ -1,0 +1,101 @@
+@import "fonts";
+
+html,
+body,
+#root,
+.timer-app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  color: #fff;
+  font-family: "Noto Sans", sans-serif;
+}
+
+.timer-app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  z-index: 1;
+
+  --bg: #ee5b5d;
+  background: var(--bg);
+  background: linear-gradient(124deg, rgba(236, 51, 92, 1) 0%, rgba(238, 100, 93, 1) 53%, rgba(236, 138, 77, 1) 100%);
+
+  transition: 4s ease background, 1s ease font-size;
+
+  // https://keithjgrant.com/posts/2017/07/transitioning-gradients/
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background: linear-gradient(153deg, rgba(43, 212, 247, 1) 0%, rgba(11, 56, 215, 1) 100%);
+
+    z-index: -1;
+    opacity: 0;
+
+    transition: 4s ease all;
+  }
+
+  &.break {
+    --bg: #1e94ea;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .timer-app {
+    font-size: 4vw;
+  }
+}
+
+.timer-content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.timer-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.timer-display {
+  font-size: 6em;
+}
+
+.timer-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 4em;
+  height: 4em;
+  border-radius: 2em;
+
+  background-color: #fff;
+  color: var(--bg);
+
+  transition: 0.1s ease all, 4s ease color;
+
+  &:hover {
+    background-color: #eee;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+}

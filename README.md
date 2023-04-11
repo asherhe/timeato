@@ -1,3 +1,3 @@
 # timeato
 
-A basic Pmodoro timer for kee
+A basic Pomodoro timer for managing your time.

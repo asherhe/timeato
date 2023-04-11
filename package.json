@@ -1,7 +1,7 @@
 {
   "name": "timeato",
   "version": "0.0.1",
-  "homepage": "./timeato",
+  "homepage": "/timeato",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",

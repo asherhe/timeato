@@ -103,9 +103,12 @@ body {
 
   transition: 0.1s ease all, bgTransition(color);
 
-  &:hover {
-    background-color: #eee;
-    transform: scale(1.1);
+  // no hover on mobile
+  @media (hover: hover) {
+    &:hover {
+      background-color: #eee;
+      transform: scale(1.1);
+    }
   }
 
   &:active {

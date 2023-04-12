@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import TimerDisplay from "./timer-display";
+import TimerControls from "./timer-controls";
+import TypeControls from "./type-controls";
 
-import TimerDisplay from "./timerDisplay";
+import TimerWorker from "../timer-worker";
+import buildWorker from "../worker-builder";
 
 /**
  * @param {} props
@@ -15,12 +17,10 @@ function App(props) {
   const [elapsed, setElapsed] = useState(0);
   const [duration, setDuration] = useState(1500);
   /** @type {["work" | "break", React.SetStateAction<"work" | "break">]} */
-  const [type, setType] = useState("work");
-
-  // const updateAnimationFrame = useRef(undefined);
+  const [timerType, setTimerType] = useState("work");
 
   const worker = useMemo(() => {
-    let worker = new Worker("timer.js");
+    let worker = buildWorker(TimerWorker);
     worker.postMessage({ val: performance.timeOrigin }); // post time origin
     return worker;
   }, []);
@@ -51,22 +51,22 @@ function App(props) {
   };
 
   const restart = () => {
-    setDuration(type === "work" ? 1500 : 300);
+    setDuration(timerType === "work" ? 1500 : 300);
     if (isPlaying()) setTimerStart(performance.now());
   };
 
   const timerFinish = useCallback(() => {
     const notifyFinish = () => {
       new Notification("Timer done", {
-        body: type === "work" ? "It's time to take a break!" : "It's time to get back to work!",
+        body: timerType === "work" ? "It's time to take a break!" : "It's time to get back to work!",
         requireInteraction: true,
       });
     };
 
     setTimerStart(undefined);
     setElapsed(0);
-    setDuration(type === "work" ? 300 : 1500);
-    setType(type === "work" ? "break" : "work");
+    setDuration(timerType === "work" ? 300 : 1500);
+    setTimerType(timerType === "work" ? "break" : "work");
 
     if (!("Notification" in window)) {
       alert("Timer done!");
@@ -80,24 +80,27 @@ function App(props) {
       });
     }
     bell.play();
-  }, [type, bell]);
+  }, [timerType, bell]);
 
   useEffect(() => {
     worker.postMessage(timerStart);
   }, [timerStart, worker]);
 
+  let playing = isPlaying();
   return (
-    <div className={"timer-app" + (type === "break" ? " break" : "")}>
+    <div className={"timer-app" + (timerType === "break" ? " break" : "")}>
       <div className="timer-content">
         <TimerDisplay time={duration - elapsed} />
-        <div className="timer-controls">
-          <div className="timer-button" onClick={isPlaying() ? pause : play}>
-            <FontAwesomeIcon icon={isPlaying() ? faPause : faPlay} />
-          </div>
-          <div className="timer-button" onClick={restart}>
-            <FontAwesomeIcon icon={faArrowRotateLeft} />
-          </div>
-        </div>
+        <TimerControls mode={playing ? "pause" : "play"} onplay={playing ? pause : play} onrestart={restart} />
+        <TypeControls
+          type={timerType}
+          setType={(type) => {
+            setDuration(type === "work" ? 1500 : 300);
+            setTimerStart(undefined);
+            setTimerType(type);
+          }}
+          active={!playing}
+        />
       </div>
     </div>
   );

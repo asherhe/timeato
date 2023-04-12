@@ -13,6 +13,16 @@ body {
   font-family: "Noto Sans", sans-serif;
 }
 
+@function bgTransition($property) {
+  @return 4s ease $property;
+}
+
+@mixin no-select {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .timer-app {
   display: flex;
   justify-content: center;
@@ -25,7 +35,7 @@ body {
   background: var(--bg);
   background: linear-gradient(124deg, rgba(236, 51, 92, 1) 0%, rgba(238, 100, 93, 1) 53%, rgba(236, 138, 77, 1) 100%);
 
-  transition: 4s ease background, 1s ease font-size;
+  transition: bgTransition(background), 1s ease font-size;
 
   // https://keithjgrant.com/posts/2017/07/transitioning-gradients/
   &::before {
@@ -41,7 +51,7 @@ body {
     z-index: -1;
     opacity: 0;
 
-    transition: 4s ease all;
+    transition: bgTransition(opacity);
   }
 
   &.break {
@@ -64,6 +74,7 @@ body {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
+  gap: 1em;
 }
 
 .timer-controls {
@@ -85,10 +96,12 @@ body {
   height: 4em;
   border-radius: 2em;
 
+  @include no-select();
+
   background-color: #fff;
   color: var(--bg);
 
-  transition: 0.1s ease all, 4s ease color;
+  transition: 0.1s ease all, bgTransition(color);
 
   &:hover {
     background-color: #eee;
@@ -97,5 +110,36 @@ body {
 
   &:active {
     transform: scale(1.05);
+  }
+}
+
+.type-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+
+  padding: 0.25em;
+  border-radius: 0.5em;
+
+  background-color: #ffffff80;
+
+  &.inactive * {
+    opacity: 0.5;
+  }
+}
+
+.type-button {
+  padding: 0.5em;
+  border-radius: 0.5em;
+
+  @include no-select();
+
+  color: var(--bg);
+  background-color: #00000000;
+
+  transition: bgTransition(color), 1s ease background-color, 1s ease opacity;
+
+  &.active {
+    background-color: #fff;
   }
 }

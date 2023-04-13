@@ -15,7 +15,7 @@ body {
 }
 
 @function bgTransition($property) {
-  @return 4s ease $property;
+  @return 1s ease $property;
 }
 
 @mixin no-select {

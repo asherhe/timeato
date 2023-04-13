@@ -20,7 +20,7 @@ class TimerType {
   duration() {
     switch (this.state) {
       case "work":
-        return 10;
+        return 1500;
       case "break":
         return this.breakCount % 4 === 3 ? 900 : 300;
       default:

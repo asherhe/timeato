@@ -87,7 +87,7 @@ function App(props) {
   };
 
   const restart = () => {
-    setDuration(timerType === "work" ? 1500 : 300);
+    setDuration(timerType.duration());
     if (isPlaying()) setTimerStart(performance.now());
   };
 

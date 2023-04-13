@@ -9,8 +9,9 @@ body,
 }
 
 body {
-  color: #fff;
   font-family: "Noto Sans", sans-serif;
+  color: #fff;
+  overflow: hidden;
 }
 
 @function bgTransition($property) {
@@ -87,14 +88,15 @@ body {
   font-size: 6em;
 }
 
-.timer-button {
+.timer-btn {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 4em;
-  height: 4em;
-  border-radius: 2em;
+  $btn-size: 4em;
+  width: $btn-size;
+  height: $btn-size;
+  border-radius: $btn-size * 0.5;
 
   @include no-select();
 
@@ -119,7 +121,7 @@ body {
 .type-controls {
   display: flex;
   flex-direction: row;
-  gap: 0;
+  gap: 0.25em;
 
   padding: 0.25em;
   border-radius: 0.5em;
@@ -131,7 +133,7 @@ body {
   }
 }
 
-.type-button {
+.type-btn {
   padding: 0.5em;
   border-radius: 0.5em;
 

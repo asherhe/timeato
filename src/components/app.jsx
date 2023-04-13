@@ -7,6 +7,43 @@ import TypeControls from "./type-controls";
 import TimerWorker from "../timer-worker";
 import buildWorker from "../worker-builder";
 
+class TimerType {
+  /**
+   * @typedef {"work" | "break"} TypeStr
+   * @param {TypeStr} state
+   */
+  constructor(state) {
+    this.state = state;
+    this.breakCount = 0;
+  }
+
+  duration() {
+    switch (this.state) {
+      case "work":
+        return 10;
+      case "break":
+        return this.breakCount % 4 === 3 ? 900 : 300;
+      default:
+        return -1;
+    }
+  }
+
+  next() {
+    switch (this.state) {
+      case "work":
+        this.state = "break";
+        break;
+      case "break":
+        this.breakCount++;
+        this.state = "work";
+        break;
+      default:
+        break;
+    }
+    return this;
+  }
+}
+
 /**
  * @param {} props
  * @returns {React.ReactNode}
@@ -15,13 +52,12 @@ function App(props) {
   /** @type {[DOMHighResTimeStamp?, React.SetStateAction<DOMHighResTimeStamp?>]} */
   const [timerStart, setTimerStart] = useState(undefined);
   const [elapsed, setElapsed] = useState(0);
-  const [duration, setDuration] = useState(1500);
-  /** @type {["work" | "break", React.SetStateAction<"work" | "break">]} */
-  const [timerType, setTimerType] = useState("work");
+  const [timerType, setTimerType] = useState(new TimerType("work"));
+  const [duration, setDuration] = useState(timerType.duration());
 
   const worker = useMemo(() => {
     let worker = buildWorker(TimerWorker);
-    worker.postMessage({ val: performance.timeOrigin }); // post time origin
+    worker.postMessage([performance.timeOrigin]); // post time origin
     return worker;
   }, []);
 
@@ -34,7 +70,7 @@ function App(props) {
     }
   };
 
-  const bell = useMemo(() => new Audio("bell.mp3"), []);
+  const bell = useMemo(() => new Audio(`${process.env.PUBLIC_URL}/bell.mp3`), []);
 
   const isPlaying = useCallback(() => {
     return timerStart !== undefined;
@@ -65,8 +101,8 @@ function App(props) {
 
     setTimerStart(undefined);
     setElapsed(0);
-    setDuration(timerType === "work" ? 300 : 1500);
-    setTimerType(timerType === "work" ? "break" : "work");
+    setTimerType(timerType.next());
+    setDuration(timerType.duration());
 
     if (!("Notification" in window)) {
       alert("Timer done!");
@@ -88,16 +124,17 @@ function App(props) {
 
   let playing = isPlaying();
   return (
-    <div className={"timer-app" + (timerType === "break" ? " break" : "")}>
+    <div className={"timer-app" + (timerType.state === "break" ? " break" : "")}>
       <div className="timer-content">
         <TimerDisplay time={duration - elapsed} />
         <TimerControls mode={playing ? "pause" : "play"} onplay={playing ? pause : play} onrestart={restart} />
         <TypeControls
-          type={timerType}
+          type={timerType.state}
           setType={(type) => {
-            setDuration(type === "work" ? 1500 : 300);
+            let newType = new TimerType(type);
             setTimerStart(undefined);
-            setTimerType(type);
+            setTimerType(newType);
+            setDuration(newType.duration());
           }}
           active={!playing}
         />

@@ -9,7 +9,7 @@ const TimerWorker = () => {
   }, 100);
 
   onmessage = (e) => {
-    if (typeof e.data === "object") timeOffset = performance.timeOrigin - e.data["val"]; // performance time offset
+    if (typeof e.data === "object") timeOffset = performance.timeOrigin - e.data[0]; // performance time offset
     else timerStart = e.data; // new timer start
   };
 };

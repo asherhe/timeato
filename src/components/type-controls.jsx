@@ -10,7 +10,7 @@ function TypeControls({ type, setType, active }) {
         let valType = val.toLowerCase();
         return (
           <div
-            className={"type-button" + (valType === type ? " active" : "")}
+            className={"type-btn" + (valType === type ? " active" : "")}
             onClick={active ? () => setType(valType) : () => {}}
             key={index}
           >

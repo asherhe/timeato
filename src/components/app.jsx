@@ -94,8 +94,7 @@ function App(props) {
   const timerFinish = useCallback(() => {
     const notifyFinish = () => {
       new Notification("Timer done", {
-        body: timerType === "work" ? "It's time to take a break!" : "It's time to get back to work!",
-        requireInteraction: true,
+        body: timerType.state === "work" ? "It's time to get back to work!" : "It's time to take a break!",
       });
     };
 

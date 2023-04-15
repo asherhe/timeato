@@ -8,7 +8,7 @@ function TimerDisplay({ time }) {
   let timeStr = `${Math.floor(time / 60)
     .toString()
     .padStart(2, "0")}:${(time % 60).toString().padStart(2, "0")}`;
-  document.title = `${timeStr} - timeato`;
+  document.title = `${timeStr} - Timeato`;
   return <span className="timer-display">{timeStr}</span>;
 }
 

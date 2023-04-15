@@ -34,7 +34,7 @@ body {
 
   --bg: #ee5b5d;
   background: var(--bg);
-  background: linear-gradient(124deg, rgba(236, 51, 92, 1) 0%, rgba(238, 100, 93, 1) 53%, rgba(236, 138, 77, 1) 100%);
+  background: linear-gradient(124deg, #ec335c 0%, #ee645d 53%, #ec8a4d 100%);
 
   transition: bgTransition(background), 1s ease font-size;
 

@@ -11,7 +11,7 @@ Manage your time and boost your productivity with timeato!
 
 timeato is a Pomodoro timer app that enables you to work with greater focus and efficiency. Split up your work time into 25-minute work intervals, taking 5-minute breaks in between to rest and refocus. With a clean and intuitive interface, timeato is distraction-free and simple to use.
 
-<img src="screenshot.png" alt="timeato screenshot" width="80%" />
+![Screenshot](screenshot.png)
 
 ## Contributing
 

@@ -1,6 +1,7 @@
 # [timeato](https://asherhe.github.io/timeato/)
 
 [![Github Pages workflow status](https://img.shields.io/github/actions/workflow/status/asherhe/timeato/static.yml?logo=github)](https://github.com/asherhe/timeato/actions/workflows/static.yml)
+[![Release Version](https://img.shields.io/github/v/release/asherhe/timeato)](https://github.com/asherhe/timeato/releases)
 [![License](https://img.shields.io/github/license/asherhe/timeato)](LICENSE)
 
 <img src="public/img/icon.svg" alt="logo" align="right" width="20%" />

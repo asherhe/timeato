@@ -1,15 +1,17 @@
 # [timeato](https://asherhe.github.io/timeato/)
 
-<img src="public/img/icon.svg" alt="logo" align="right" width="15%" />
-
 [![Github Pages workflow status](https://img.shields.io/github/actions/workflow/status/asherhe/timeato/static.yml?logo=github)](https://github.com/asherhe/timeato/actions/workflows/static.yml)
 [![License](https://img.shields.io/github/license/asherhe/timeato)](LICENSE)
+
+<img src="public/img/icon.svg" alt="logo" align="right" width="20%" />
+
+[Changelog](CHANGELOG.md)
 
 Manage your time and boost your productivity with timeato!
 
 timeato is a Pomodoro timer app that enables you to work with greater focus and efficiency. Split up your work time into 25-minute work intervals, taking 5-minute breaks in between to rest and refocus. With a clean and intuitive interface, timeato is distraction-free and simple to use.
 
-<img src="screenshot.png" alt="timeato screenshot" width="50%" />
+<img src="screenshot.png" alt="timeato screenshot" width="80%" />
 
 ## Contributing
 

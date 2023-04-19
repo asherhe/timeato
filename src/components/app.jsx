@@ -136,6 +136,7 @@ function App(props) {
           setType={(type) => {
             let newType = new TimerType(type);
             setTimerStart(undefined);
+            setElapsed(0);
             setTimerType(newType);
             setDuration(newType.duration());
           }}

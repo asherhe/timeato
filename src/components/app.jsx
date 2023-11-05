@@ -143,15 +143,6 @@ function App(props) {
           active={!playing}
         />
       </div>
-      <footer>
-        <div>Copyright © 2023 asherhe</div>
-        <a href="https://github.com/asherhe/timeato" title="GitHub repository">
-          <FontAwesomeIcon icon={faGithub} />
-        </a>
-        <a href="https://github.com/asherhe/timeato/issues/new/choose" title="Report a bug">
-          <FontAwesomeIcon icon={faBug} />
-        </a>
-      </footer>
     </div>
   );
 }

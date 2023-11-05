@@ -136,21 +136,13 @@ function App(props) {
           setType={(type) => {
             let newType = new TimerType(type);
             setTimerStart(undefined);
+            setElapsed(0);
             setTimerType(newType);
             setDuration(newType.duration());
           }}
           active={!playing}
         />
       </div>
-      <footer>
-        <div>Copyright © 2023 asherhe</div>
-        <a href="https://github.com/asherhe/timeato" title="GitHub repository">
-          <FontAwesomeIcon icon={faGithub} />
-        </a>
-        <a href="https://github.com/asherhe/timeato/issues/new/choose" title="Report a bug">
-          <FontAwesomeIcon icon={faBug} />
-        </a>
-      </footer>
     </div>
   );
 }

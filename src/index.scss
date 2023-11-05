@@ -170,9 +170,10 @@ footer {
 
   & > a {
     color: #fff;
-    transition: 0.5s ease color;
+    opacity: 1;
+    transition: 0.5s ease opacity;
     &:hover {
-      color: #f5b6b3;
+      opacity: 0.5;
     }
   }
 }

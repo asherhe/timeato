@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBug } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-
 import TimerDisplay from "./timer-display";
 import TimerControls from "./timer-controls";
 import TypeControls from "./type-controls";

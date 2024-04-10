@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlay,
+  faPause,
+  faArrowRotateLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 /**
  * @param {{mode: "play" | "pause", onplay: () => void, onrestart: () => void}} props
- * @returns
  */
 function TimerControls({ mode, onplay, onrestart }) {
   return (

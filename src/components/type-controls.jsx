@@ -1,7 +1,5 @@
 /**
- *
  * @param {{type: "work" | "break", setType: (value: "work" | "break") => void, active: boolean}} props
- * @returns
  */
 function TypeControls({ type, setType, active }) {
   return (

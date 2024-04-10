@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import TimerDisplay from "./timer-display";
 import TimerControls from "./timer-controls";
 import TypeControls from "./type-controls";
+import { TimerConfig, defaultConfig } from "./timer-config";
 
 import TimerWorker from "../timer-worker";
 import buildWorker from "../worker-builder";
@@ -17,12 +18,19 @@ class TimerType {
     this.breakCount = 0;
   }
 
-  duration() {
+  /**
+   *
+   * @param {import("./timer-config").config} config
+   * @returns {number} the duration of the timer's current state
+   */
+  duration(config) {
     switch (this.state) {
       case "work":
-        return 1500;
+        return config.work;
       case "break":
-        return this.breakCount % 4 === 3 ? 900 : 300;
+        return (this.breakCount + 1) % config.longfreq === 0
+          ? config.longbreak
+          : config.break;
       default:
         return -1;
     }
@@ -49,28 +57,42 @@ class TimerType {
  * @returns {React.ReactNode}
  */
 function App(props) {
-  /** @type {[DOMHighResTimeStamp?, React.SetStateAction<DOMHighResTimeStamp?>]} */
+  /**
+   * app config
+   * @type {[import("./timer-config").config, React.SetStateAction<import("./timer-config").config>]}
+   */
+  const [config, setConfig] = useState(defaultConfig);
+
+  /**
+   * timestamp of when the timer was started
+   * @type {[DOMHighResTimeStamp?, React.SetStateAction<DOMHighResTimeStamp?>]}
+   */
   const [timerStart, setTimerStart] = useState(undefined);
   const [elapsed, setElapsed] = useState(0);
   const [timerType, setTimerType] = useState(new TimerType("work"));
-  const [duration, setDuration] = useState(timerType.duration());
+  const [duration, setDuration] = useState(timerType.duration(config));
 
+  // timer worker (runs in background)
   const worker = useMemo(() => {
     let worker = buildWorker(TimerWorker);
     worker.postMessage([performance.timeOrigin]); // post time origin
     return worker;
   }, []);
 
+  // time update from worker
   worker.onmessage = (e) => {
     let elapsedTime = e.data;
-    // console.log(elapsedTime);
     if (elapsedTime !== elapsed) {
       if (elapsedTime >= duration) timerFinish();
       else setElapsed(elapsedTime);
     }
   };
 
-  const bell = useMemo(() => new Audio(`${process.env.PUBLIC_URL}/bell.mp3`), []);
+  // load the bell sound
+  const bell = useMemo(
+    () => new Audio(`${process.env.PUBLIC_URL}/bell.mp3`),
+    []
+  );
 
   const isPlaying = useCallback(() => {
     return timerStart !== undefined;
@@ -87,22 +109,28 @@ function App(props) {
   };
 
   const restart = () => {
-    setDuration(timerType.duration());
+    setDuration(timerType.duration(config));
     if (isPlaying()) setTimerStart(performance.now());
   };
 
   const timerFinish = useCallback(() => {
+    // make a new notification
     const notifyFinish = () => {
       new Notification("Timer done", {
-        body: timerType.state === "work" ? "It's time to get back to work!" : "It's time to take a break!",
+        body:
+          timerType.state === "work"
+            ? "It's time to get back to work!"
+            : "It's time to take a break!",
       });
     };
 
+    // reset timer
     setTimerStart(undefined);
     setElapsed(0);
     setTimerType(timerType.next());
-    setDuration(timerType.duration());
+    setDuration(timerType.duration(config));
 
+    // send notification
     if (!("Notification" in window)) {
       alert("Timer done!");
     } else if (Notification.permission === "granted") {
@@ -115,18 +143,34 @@ function App(props) {
       });
     }
     bell.play();
-  }, [timerType, bell]);
 
+    if (config.autoStart) {
+      play();
+    }
+  }, [timerType, bell, config]);
+
+  // update time for woker
   useEffect(() => {
     worker.postMessage(timerStart);
   }, [timerStart, worker]);
 
+  // update timer duration if config is updated and timer is not running
+  useEffect(() => {
+    if (!isPlaying()) setDuration(timerType.duration(config));
+  }, [config, isPlaying, timerType]);
+
   let playing = isPlaying();
   return (
-    <div className={"timer-app" + (timerType.state === "break" ? " break" : "")}>
+    <div
+      className={"timer-app" + (timerType.state === "break" ? " break" : "")}
+    >
       <div className="timer-content">
         <TimerDisplay time={duration - elapsed} />
-        <TimerControls mode={playing ? "pause" : "play"} onplay={playing ? pause : play} onrestart={restart} />
+        <TimerControls
+          mode={playing ? "pause" : "play"}
+          onplay={playing ? pause : play}
+          onrestart={restart}
+        />
         <TypeControls
           type={timerType.state}
           setType={(type) => {
@@ -134,11 +178,12 @@ function App(props) {
             setTimerStart(undefined);
             setElapsed(0);
             setTimerType(newType);
-            setDuration(newType.duration());
+            setDuration(newType.duration(config));
           }}
           active={!playing}
         />
       </div>
+      <TimerConfig config={config} setConfig={setConfig} />
     </div>
   );
 }

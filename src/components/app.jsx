@@ -72,6 +72,8 @@ function App(props) {
   const [timerType, setTimerType] = useState(new TimerType("work"));
   const [duration, setDuration] = useState(timerType.duration(config));
 
+  const [paused, setPaused] = useState(false);
+
   // timer worker (runs in background)
   const worker = useMemo(() => {
     let worker = buildWorker(TimerWorker);
@@ -100,17 +102,20 @@ function App(props) {
 
   const play = () => {
     setTimerStart(performance.now());
+    setPaused(false);
   };
 
   const pause = () => {
     setTimerStart(undefined);
     setDuration(duration - elapsed);
     setElapsed(0);
+    setPaused(true);
   };
 
   const restart = () => {
     setDuration(timerType.duration(config));
     if (isPlaying()) setTimerStart(performance.now());
+    setPaused(false);
   };
 
   const timerFinish = useCallback(() => {
@@ -156,8 +161,8 @@ function App(props) {
 
   // update timer duration if config is updated and timer is not running
   useEffect(() => {
-    if (!isPlaying()) setDuration(timerType.duration(config));
-  }, [config, isPlaying, timerType]);
+    if (!isPlaying() && !paused) setDuration(timerType.duration(config));
+  }, [config, isPlaying, timerType, paused]);
 
   let playing = isPlaying();
   return (
